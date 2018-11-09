@@ -40,3 +40,18 @@ document.getElementById("articulos").innerHTML += tarjeta(articulos[1]);
 document.getElementById("articulos").innerHTML += tarjeta(articulos[2]);
 
 document.getElementById("contenido").innerHTML += '</div>';
+
+evento(articulo1);
+evento(articulo2);
+evento(articulo3);
+
+function evento(articulo){
+    document.getElementById(articulo.id).addEventListener("click", eventoArticulo);
+
+    function eventoArticulo() {
+        document.getElementById("carrito").style.display = "block";
+        totalArticulos += articulo.precio;
+        document.getElementById("artcarri").innerHTML += '<tr> <th scope="row">'+ articulo.id + '</th> <td>' + articulo.nombre + '</td> <td>' + articulo.modelo + '</td> <td>' + articulo.precio + '€</td> </tr>';
+        document.getElementById("total").innerHTML = 'Total: ' + totalArticulos + '€';
+    }
+}
