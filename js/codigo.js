@@ -55,3 +55,47 @@ function evento(articulo){
         document.getElementById("total").innerHTML = 'Total: ' + totalArticulos + '€';
     }
 }
+
+//Crear nuevos articulos
+document.getElementById("contenido").innerHTML += '<br><button type="button" id="btn0" class="btn btn-secondary my-2 btn-secondary font-weight-bold">crear articulo</button><br>';
+document.getElementById("btn0").addEventListener("click", crearArt);
+
+function crearArt(){
+    document.getElementById("contenido").innerHTML += formulario;
+    document.getElementById("cre").addEventListener("click", nuevoObjeto);
+    for(let i = 0; i < articulos.length; i++){
+        evento(articulos[i]);
+    }
+}
+function nuevoObjeto(){
+    let numero = articulos.length + 1;
+    
+    let name = document.getElementById("name").value;
+    let modelo = document.getElementById("modelo").value;
+    let cantidad = parseInt(document.getElementById("cantidad").value);
+    let precio = parseInt(document.getElementById("precio").value);
+    let impuesto = parseInt(document.getElementById("impuesto").value);
+    let imagen = "";
+    if((document.getElementById("imagen").value).length == 0){
+        imagen = "./img/generico.jpg"
+    }else{
+        imagen = document.getElementById("imagen").value;
+    }
+    articulos[articulos.length] = new arti("art" + numero, name, modelo, cantidad, precio, impuesto, imagen);
+
+    document.getElementById("articulos").innerHTML += tarjeta(articulos[articulos.length -1]);
+    
+    for(let i = 0; i < articulos.length; i++){
+        evento(articulos[i]);
+    }
+}
+
+var formulario = '<form id="from" class="form-inline col-12 mt-5">';
+    formulario += '<input type="text" class="form-control mb-2 mr-sm-2" id="name" placeholder="Nombre articulo" required>';
+    formulario += '<input type="text" class="form-control mb-2 mr-sm-2" id="modelo" placeholder="Modelo articulo" required>';
+    formulario += '<input type="text" class="form-control mb-2 mr-sm-2" id="cantidad" placeholder="Cantidad disponible" required>';
+    formulario += '<input type="text" class="form-control mb-2 mr-sm-2" id="precio" placeholder="Precio (Sin IVA)" required>';
+    formulario += '<input type="text" class="form-control mb-2 mr-sm-2" id="impuesto" placeholder="IVA aplicable" required>';
+    formulario += '<input type="text" class="form-control mb-2 mr-sm-2" id="imagen" placeholder="URL Imagen">';
+    formulario += '<button id="cre" type="button" class="btn btn-primary mb-2">Crear Articulo</button>';
+    formulario += '</form>';
