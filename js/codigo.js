@@ -29,13 +29,38 @@ function tarjeta(articulo){ //Tarjetas que muestran los articulos de la tienda
     return card;
 }
 
+function alerta(mensaje){
+    var aler = '<div id="myModal" class="modal fade" tabindex="-1" role="dialog">';
+        aler += '<div class="modal-dialog">';
+        aler += '<div class="modal-content bg-danger text-white p-3">';
+        aler += mensaje;
+        aler += '</div></div></div>';
+        return aler;
+}
+var totalArticulos = 0;
+var articulosCarrito = new Array();
+
 function evento(articulo){
     document.getElementById(articulo.id).addEventListener("click", eventoArticulo);
+    //--------------------Crea el carrito compra----------------------------
 
     function eventoArticulo() {
+        if(articulosCarrito[articulo.id] >= 1){
+            if(articulosCarrito[articulo.id] < articulo.cantidadDisponible){
+                articulosCarrito[articulo.id] = articulosCarrito[articulo.id] + 1;
+                totalArticulos += articulo.precio;
+                document.getElementById("uni" + articulo.id).innerHTML = articulosCarrito[articulo.id];
+            }else{
+                document.getElementById("modal").innerHTML += alerta("No hay suficientes unidades en Stock");
+                $("#myModal").modal();
+            }
+        }else{
+            articulosCarrito[articulo.id] = 1;
+            totalArticulos += articulo.precio;
+            document.getElementById("artcarri").innerHTML += '<tr> <th scope="row">'+ articulo.id + '</th> <td>' + articulo.nombre + '</td> <td>' + articulo.modelo + '</td> <td id="uni' + articulo.id + '">' + articulosCarrito[articulo.id] + '</td> <td>' + articulo.precio + '€</td> </tr>';
+        }
+        
         document.getElementById("carrito").style.display = "block";
-        totalArticulos += articulo.precio;
-        document.getElementById("artcarri").innerHTML += '<tr> <th scope="row">'+ articulo.id + '</th> <td>' + articulo.nombre + '</td> <td>' + articulo.modelo + '</td> <td>' + articulo.precio + '€</td> </tr>';
         document.getElementById("total").innerHTML = 'Total: ' + totalArticulos + '€';
     }
 }
