@@ -158,7 +158,7 @@ var formulario = '<form id="from" class="form-inline col-12 mt-5">';
 
 function evento2(articulo){
         document.getElementById("menos" + articulo.id).addEventListener("click", eventoResta);
-        //document.getElementById("mas" + articulo.id).addEventListener("click", eventoSuma);
+        document.getElementById("mas" + articulo.id).addEventListener("click", eventoSuma);
 
         function eventoResta(){
             
@@ -177,10 +177,22 @@ function evento2(articulo){
                     elementoPadre.removeChild(elemento);
                     
                     document.getElementById("total").innerHTML = 'Total: ' + totalArticulos + '€';
-                    //document.getElementById("total").style.display = "none";
+
                 }
         }
-        //function eventoResta(){}
+        function eventoSuma(){
+
+                if(articulosCarrito[articulo.id] < articulo.cantidadDisponible){
+            
+                    articulosCarrito[articulo.id] += 1;
+                    totalArticulos += articulo.precio;
+                    document.getElementById("uni" + articulo.id).innerHTML = articulosCarrito[articulo.id];
+                    document.getElementById("total").innerHTML = 'Total: ' + totalArticulos + '€';
+                }else{
+                    document.getElementById("modal").innerHTML += alerta("No hay suficientes unidades en Stock");
+                    $("#myModal").modal();
+                }
+        }
         
     
 }
