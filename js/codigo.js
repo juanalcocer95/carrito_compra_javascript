@@ -41,29 +41,62 @@ var totalArticulos = 0;
 var articulosCarrito = new Array();
 
 function evento(articulo){
-    document.getElementById(articulo.id).addEventListener("click", eventoArticulo);
+    document.getElementById(articulo.id).addEventListener("click", GenerarCarrito);
     //--------------------Crea el carrito compra----------------------------
 
-    function eventoArticulo() {
-        if(articulosCarrito[articulo.id] >= 1){
-            if(articulosCarrito[articulo.id] < articulo.cantidadDisponible){
-                articulosCarrito[articulo.id] = articulosCarrito[articulo.id] + 1;
-                totalArticulos += articulo.precio;
-                document.getElementById("uni" + articulo.id).innerHTML = articulosCarrito[articulo.id];
-            }else{
-                document.getElementById("modal").innerHTML += alerta("No hay suficientes unidades en Stock");
-                $("#myModal").modal();
-            }
-        }else{
+    function GenerarCarrito() {
+
+        let carrito = '<h3 class="text-center">Carrito compra</h3>';
+            carrito += '<table class="table">';
+            carrito += '<thead class="thead-dark">';
+            carrito += '<tr><th>#</th><th>Nombre</th><th>Modelo</th><th>Unidades</th><th>Precio (Sin IVA)</th></tr>';
+            carrito += '</thead><tbody id="artcarri">';
+            carrito += '</tbody><tbody>';
+            carrito += '<tr><th></th><th></th><th></th><th></th><th id="total"></th></tr>';
+            carrito += '</tbody></table>';
+
+        let filaArt =  '<tr id="fila' + articulo.id + '"> <th scope="row">'+ articulo.id + '</th>';
+            filaArt += '<td>' + articulo.nombre + '</td>';
+            filaArt += '<td>' + articulo.modelo + '</td>';
+            filaArt += '<td><button id="menos' + articulo.id + '"><</button><span id="uni' + articulo.id + '" class="mx-2">' + articulosCarrito[articulo.id] + '</span><button id="mas' + articulo.id + '">></button></td>';
+            filaArt += '<td>' + articulo.precio + '€</td> </tr>';
+
+        if(document.getElementById("carrito").innerHTML == ""){
+            document.getElementById("carrito").innerHTML = carrito;
+        }   
+        if(articulosCarrito[articulo.id] == 0){
             articulosCarrito[articulo.id] = 1;
             totalArticulos += articulo.precio;
-            document.getElementById("artcarri").innerHTML += '<tr> <th scope="row">'+ articulo.id + '</th> <td>' + articulo.nombre + '</td> <td>' + articulo.modelo + '</td> <td id="uni' + articulo.id + '">' + articulosCarrito[articulo.id] + '</td> <td>' + articulo.precio + '€</td> </tr>';
+
+            document.getElementById("artcarri").innerHTML += filaArt;
+            document.getElementById("uni" + articulo.id).innerHTML = articulosCarrito[articulo.id];
+            
+            evento2(articulo);
+        } else if(!articulosCarrito[articulo.id] >= 1){
+            articulosCarrito[articulo.id] = 1;
+            totalArticulos += articulo.precio;
+
+            document.getElementById("artcarri").innerHTML += filaArt;
+            document.getElementById("uni" + articulo.id).innerHTML = articulosCarrito[articulo.id];
+            
+            evento2(articulo);
+        }else if(articulosCarrito[articulo.id] < articulo.cantidadDisponible){
+            
+            articulosCarrito[articulo.id] += 1;
+            totalArticulos += articulo.precio;
+            document.getElementById("fila" + articulo.id).innerHTML = filaArt;
+            document.getElementById("uni" + articulo.id).innerHTML = articulosCarrito[articulo.id];
+            evento2(articulo);
+        }else{
+            document.getElementById("modal").innerHTML += alerta("No hay suficientes unidades en Stock");
+            $("#myModal").modal();
         }
-        
+   
         document.getElementById("carrito").style.display = "block";
         document.getElementById("total").innerHTML = 'Total: ' + totalArticulos + '€';
     }
 }
+
 
 var totalArticulos = 0;
 
@@ -108,6 +141,7 @@ function nuevoObjeto(){
         
     for(let i = 0; i < articulos.length; i++){
         evento(articulos[i]);
+        evento2(articulos[i]);
     }
 
 }
@@ -122,6 +156,37 @@ var formulario = '<form id="from" class="form-inline col-12 mt-5">';
     formulario += '<button id="cre" type="button" class="btn btn-primary mb-2">Crear Articulo</button>';
     formulario += '</form>';
 
+function evento2(articulo){
+        document.getElementById("menos" + articulo.id).addEventListener("click", eventoResta);
+        //document.getElementById("mas" + articulo.id).addEventListener("click", eventoSuma);
+
+        function eventoResta(){
+            
+            if(articulosCarrito[articulo.id] > 1){
+                articulosCarrito[articulo.id] -= 1;
+                document.getElementById("uni" + articulo.id).innerHTML = articulosCarrito[articulo.id];
+                totalArticulos -= articulo.precio;                
+                document.getElementById("total").innerHTML = 'Total: ' + totalArticulos + '€';
+                }else if(articulosCarrito[articulo.id] == 1){
+                    articulosCarrito[articulo.id] = 0;
+                    
+                    totalArticulos -= articulo.precio;
+
+                    let elemento = document.getElementById("fila" + articulo.id);
+                    let elementoPadre = elemento.parentNode;
+                    elementoPadre.removeChild(elemento);
+                    
+                    document.getElementById("total").innerHTML = 'Total: ' + totalArticulos + '€';
+                    //document.getElementById("total").style.display = "none";
+                }
+        }
+        //function eventoResta(){}
+        
+    
+}
 evento(articulos[0]);
 evento(articulos[1]);
 evento(articulos[2]);
+for(let i = 0; i < articulosCarrito.length; i++){
+    evento2(articulos[i]);
+}
