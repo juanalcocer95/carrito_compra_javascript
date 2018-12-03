@@ -43,7 +43,7 @@ var articulosCarrito = new Array();
 function evento(articulo){
     document.getElementById(articulo.id).addEventListener("click", GenerarCarrito);
     //--------------------Crea el carrito compra----------------------------
-
+    
     function GenerarCarrito() {
 
         let carrito = '<h3 class="text-center">Carrito compra</h3>';
@@ -94,6 +94,7 @@ function evento(articulo){
    
         document.getElementById("carrito").style.display = "block";
         document.getElementById("total").innerHTML = 'Total: ' + totalArticulos + '€';
+
     }
 }
 
@@ -141,7 +142,6 @@ function nuevoObjeto(){
         
     for(let i = 0; i < articulos.length; i++){
         evento(articulos[i]);
-        evento2(articulos[i]);
     }
 
 }
@@ -177,7 +177,6 @@ function evento2(articulo){
                     elementoPadre.removeChild(elemento);
                     
                     document.getElementById("total").innerHTML = 'Total: ' + totalArticulos + '€';
-
                 }
         }
         function eventoSuma(){
@@ -192,13 +191,15 @@ function evento2(articulo){
                     document.getElementById("modal").innerHTML += alerta("No hay suficientes unidades en Stock");
                     $("#myModal").modal();
                 }
-        }
-        
-    
+        }   
 }
-evento(articulos[0]);
-evento(articulos[1]);
-evento(articulos[2]);
-for(let i = 0; i < articulosCarrito.length; i++){
-    evento2(articulos[i]);
-}
+
+
+document.addEventListener("DOMContentLoaded", function() {
+    for(let i = 0; i < articulosCarrito.length; i++){
+            evento2(articulos[i]);    
+    }
+    for(let i = 0; i < articulos.length; i++){
+        evento(articulos[i]);
+    }
+  });
